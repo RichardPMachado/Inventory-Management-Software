@@ -1,0 +1,11 @@
+{
+  "name": "inventory-management-software",
+  "version": "1.0.0",
+  "description": "estoque de controlhe de produtos",
+  "scripts": {
+    "compose:up": "cd app/ && docker-compose up -d --build",
+    "compose:down": "cd app/ && docker-compose down"
+  },
+  "author": "richard-peret-machado-",
+  "license": "ISC"
+}
