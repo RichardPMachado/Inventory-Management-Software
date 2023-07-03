@@ -109,7 +109,26 @@ export class UserService {
     }
     throw new NotFoundException(`User email: ${email} Not Found`);
   }
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+
+  async removeById(id: number): Promise<void> {
+    const user = await this.findOne(id);
+    // console.log(user);
+    if (!user) {
+      throw new NotFoundException(`User id: ${id} Not Found`);
+    }
+    await this.prisma.user.delete({
+      where: { id },
+    });
+  }
+
+  async removeByEmail(email: string): Promise<void> {
+    const user = await this.findByEmail(email);
+    console.log(user);
+    if (!user) {
+      throw new NotFoundException(`User email: ${email} Not Found`);
+    }
+    await this.prisma.user.delete({
+      where: { email },
+    });
   }
 }
