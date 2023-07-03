@@ -1,13 +1,18 @@
+import { PrismaService } from 'src/prisma/prisma.service';
+
+import { createHash, validateHash } from '@/utils/hash';
 import {
   BadGatewayException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
+import { User } from '@prisma/client';
+
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdatePasswordDto } from './dto/update-password.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { PrismaService } from '@/prisma/prisma.service';
-import { User } from './entities/user.entity';
-import { createHash } from 'crypto';
+import * as currentUser from './entities/user.entity';
 
 @Injectable()
 export class UserService {
@@ -36,7 +41,7 @@ export class UserService {
     return this.prisma.user.findMany();
   }
 
-  async findOne(id: number) {
+  async findOne(id: number): Promise<User> {
     const user = await this.prisma.user.findFirst({
       where: { id },
     });
@@ -56,10 +61,54 @@ export class UserService {
     return user;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async updatePassword(
+    email: string,
+    updatePasswordDto: UpdatePasswordDto,
+    currentUser: currentUser.User,
+  ) {
+    const current: User = await this.findByEmail(email);
+    if (email === currentUser.email) {
+      if (
+        !(await validateHash(
+          updatePasswordDto.currentPassword,
+          current.password,
+        ))
+      ) {
+        throw new UnauthorizedException(
+          'Email address or password provided is incorrect.',
+        );
+      }
+      const newUser = await this.prisma.user.update({
+        where: { email },
+        data: {
+          password: await createHash(updatePasswordDto.newPassword),
+        },
+      });
+      return newUser;
+    }
+    throw new NotFoundException(`User email: ${email} Not Found`);
   }
 
+  async updateUser(
+    email: string,
+    user: UpdateUserDto,
+    currentUser: currentUser.User,
+  ) {
+    // if (!user.password) delete user.password;
+    // console.log(user);
+
+    if (email === currentUser.email) {
+      const newUser = await this.prisma.user.update({
+        where: { email },
+        data: {
+          ...user,
+        },
+      });
+      console.log(newUser);
+      return newUser;
+    }
+    throw new NotFoundException(`User email: ${email} Not Found`);
+  }
   remove(id: number) {
     return `This action removes a #${id} user`;
   }

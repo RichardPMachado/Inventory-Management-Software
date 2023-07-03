@@ -10,6 +10,9 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './entities/user.entity';
+import { CurrentUser } from '@/decorators/current-user.decorator';
+import { UpdatePasswordDto } from './dto/update-password.dto';
 
 @Controller('user')
 export class UserController {
@@ -36,9 +39,26 @@ export class UserController {
     return this.userService.findByEmail(email);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+  @Patch('update-password/:email')
+  updatePassword(
+    @Param('email') email: string,
+    @Body() updatePasswordDto: UpdatePasswordDto,
+    @CurrentUser() currentUser: User,
+  ) {
+    return this.userService.updatePassword(
+      email,
+      updatePasswordDto,
+      currentUser,
+    );
+  }
+
+  @Patch('update-user/:email')
+  updateUser(
+    @Param('email') email: string,
+    @Body() updateUserDto: UpdateUserDto,
+    @CurrentUser() currentUser: User,
+  ) {
+    return this.userService.updateUser(email, updateUserDto, currentUser);
   }
 
   @Delete(':id')
