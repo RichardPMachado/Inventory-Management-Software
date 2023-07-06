@@ -5,4 +5,6 @@ export interface IUserPayload {
   email: string;
   name: string;
   role: UserType;
+  iat?: number;
+  exp?: number;
 }
