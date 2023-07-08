@@ -19,15 +19,18 @@ export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createUserDto: CreateUserDto) {
-    const user = await this.findByEmail(createUserDto.email);
-    const data = {
-      ...createUserDto,
-      password: await createHash(createUserDto.password),
-    };
+    console.log(createUserDto);
+    const user = await this.prisma.user.findUnique({
+      where: { email: createUserDto.email },
+    });
 
     if (user) {
       throw new BadGatewayException('email registered in system');
     }
+    const data = {
+      ...createUserDto,
+      password: await createHash(createUserDto.password),
+    };
 
     const createdUser = await this.prisma.user.create({ data });
 
@@ -52,7 +55,9 @@ export class UserService {
   }
 
   async findByEmail(email: string): Promise<User> {
-    const user = await await this.prisma.user.findUnique({
+    console.log(email);
+
+    const user = await this.prisma.user.findUnique({
       where: { email },
     });
     if (!user) {
