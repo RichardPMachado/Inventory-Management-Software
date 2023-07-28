@@ -1,4 +1,4 @@
-import { MockUser } from './createUser.mock';
+import { MockUser } from './serviceUser.mock';
 
 export const mockPrisma = {
   user: {

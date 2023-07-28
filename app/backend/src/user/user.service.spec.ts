@@ -5,7 +5,7 @@ import {
   MockUser,
   createNewUser,
   errorCreateNewUser,
-} from '@/mocks/createUser.mock';
+} from '@/mocks/serviceUser.mock';
 import { mockPrisma } from '@/mocks/prismaUser.mock';
 import { UserType } from '@/enum/user-type.enum';
 import { validateHash } from '@/utils/hash';

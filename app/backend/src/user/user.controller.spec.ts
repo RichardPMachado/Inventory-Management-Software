@@ -6,7 +6,7 @@ import {
   MockUserService,
   createNewUser,
   errorCreateNewUser,
-} from '@/mocks/createUser.mock';
+} from '@/mocks/serviceUser.mock';
 import { UserType } from '@/enum/user-type.enum';
 import { UpdateUserDto } from './dto/update-user.dto';
 // import { PrismaService } from '@/prisma/prisma.service';
