@@ -1,4 +1,4 @@
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '@/prisma/prisma.service';
 
 import { createHash, validateHash } from '@/utils/hash';
 import {
@@ -19,7 +19,7 @@ export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createUserDto: CreateUserDto) {
-    console.log(createUserDto);
+    // console.log(createUserDto);
     const user = await this.prisma.user.findUnique({
       where: { email: createUserDto.email },
     });
@@ -43,9 +43,8 @@ export class UserService {
   findAll() {
     return this.prisma.user.findMany();
   }
-
   async findOne(id: number): Promise<User> {
-    const user = await this.prisma.user.findFirst({
+    const user = await this.prisma.user.findUnique({
       where: { id },
     });
     if (!user) {
@@ -55,8 +54,6 @@ export class UserService {
   }
 
   async findByEmail(email: string): Promise<User> {
-    console.log(email);
-
     const user = await this.prisma.user.findUnique({
       where: { email },
     });
@@ -71,6 +68,7 @@ export class UserService {
     updatePasswordDto: UpdatePasswordDto,
     currentUser: currentUser.User,
   ) {
+    // console.log('estou funcionando');
     const current: User = await this.findByEmail(email);
     if (email === currentUser.email) {
       if (
@@ -83,6 +81,7 @@ export class UserService {
           'Email address or password provided is incorrect.',
         );
       }
+      // console.log('estou aqui', current);
       const newUser = await this.prisma.user.update({
         where: { email },
         data: {
@@ -99,9 +98,6 @@ export class UserService {
     user: UpdateUserDto,
     currentUser: currentUser.User,
   ) {
-    // if (!user.password) delete user.password;
-    // console.log(user);
-
     if (email === currentUser.email) {
       const newUser = await this.prisma.user.update({
         where: { email },
@@ -109,13 +105,12 @@ export class UserService {
           ...user,
         },
       });
-      console.log(newUser);
       return newUser;
     }
     throw new NotFoundException(`User email: ${email} Not Found`);
   }
 
-  async removeById(id: number): Promise<void> {
+  async removeById(id: number): Promise<string> {
     const user = await this.findOne(id);
     // console.log(user);
     if (!user) {
@@ -124,16 +119,18 @@ export class UserService {
     await this.prisma.user.delete({
       where: { id },
     });
+    return 'The user was deleted';
   }
 
-  async removeByEmail(email: string): Promise<void> {
+  async removeByEmail(email: string): Promise<string> {
     const user = await this.findByEmail(email);
-    console.log(user);
     if (!user) {
       throw new NotFoundException(`User email: ${email} Not Found`);
     }
     await this.prisma.user.delete({
       where: { email },
     });
+
+    return 'The user was deleted';
   }
 }

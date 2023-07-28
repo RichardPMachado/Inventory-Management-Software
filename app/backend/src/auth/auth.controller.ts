@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { IAuthRequest } from './models/IAuthRequest';
-import { LocalAuthGuard } from '@/guards/loca-auth.guards';
+import { LocalAuthGuard } from '@/guards/local-auth.guards';
 import { IsPublic } from '@/decorators/is-public.decorator';
 
 @Controller()

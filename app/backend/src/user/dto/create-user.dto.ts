@@ -6,7 +6,7 @@ import {
   MinLength,
 } from 'class-validator';
 
-import { UserType } from '@/enum/user-type.enum';
+// import { UserType } from '@/enum/user-type.enum';
 
 import { User } from '../entities/user.entity';
 
@@ -27,5 +27,5 @@ export class CreateUserDto extends User {
   name: string;
 
   @IsString()
-  role: UserType;
+  role: 'user' | 'root' | 'admin';
 }

@@ -1,6 +1,6 @@
 import { IsEmail, IsString, MinLength } from 'class-validator';
 
-import { UserType } from '@/enum/user-type.enum';
+// import { UserType } from '@/enum/user-type.enum';
 
 export class UpdateUserDto {
   @IsEmail()
@@ -11,5 +11,5 @@ export class UpdateUserDto {
   name: string;
 
   @IsString()
-  role: UserType;
+  role: 'admin' | 'root' | 'user';
 }

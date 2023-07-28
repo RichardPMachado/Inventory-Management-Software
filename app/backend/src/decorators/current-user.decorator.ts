@@ -7,7 +7,7 @@ import { IAuthRequest } from '../auth/models/IAuthRequest';
 export const CurrentUser = createParamDecorator(
   (data: unknown, context: ExecutionContext): User => {
     const request = context.switchToHttp().getRequest<IAuthRequest>();
-
+    console.log(request);
     return request.user;
   },
 );

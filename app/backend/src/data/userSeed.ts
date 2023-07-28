@@ -2,7 +2,7 @@ export const userSeed = [
   {
     email: 'richard@email.com',
     name: 'Richard',
-    password: '$2b$10$NiLt4TsvBYg4VWcCCpDBluqi71INS1oKYKVp64lBMJjqiauVBKB0a', // "Pass#$wordKey123"
+    password: '$2b$10$NiLt4TsvBYg4VWcCCpDBluqi71INS1oKYKVp64lBMJjqiauVBKB0a',
     // "Pass#$wordKey123"
     role: 'root',
   },
