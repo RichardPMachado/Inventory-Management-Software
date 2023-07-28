@@ -1,5 +1,5 @@
-version: '3.9'
-name: inventory-management-software
+version: '3.8'
+name: 'inventory-management-software'
 services:
   # frontend:
   #   container_name: stock_frontend
@@ -55,17 +55,15 @@ services:
     platform: linux/x86_64
     ports:
       - 3306:3306
-    env_file:
-      - .env
     environment:
       - MYSQL_ROOT_PASSWORD=${DB_PASS}
+      - MYSQL_DATABASE=${DB_DATABASE}
+      - MYSQL_USER=${DB_USER}
       - DATABASE_URL=${DATABASE_URL}
     restart: 'always'
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"] # Deve aguardar o banco ficar operacional
       timeout: 10s
       retries: 5
-    volumes:
-      - ./db:/var/lib/mysql
     cap_add:
       - SYS_NICE # Deve omitir alertas menores
