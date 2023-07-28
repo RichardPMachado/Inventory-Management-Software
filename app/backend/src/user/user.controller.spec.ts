@@ -4,11 +4,11 @@ import { UserService } from './user.service';
 import {
   MockUser,
   MockUserService,
-  // createMockUserController,
+  createNewUser,
+  errorCreateNewUser,
 } from '@/mocks/createUser.mock';
 import { UserType } from '@/enum/user-type.enum';
 import { UpdateUserDto } from './dto/update-user.dto';
-// import supertest from 'supertest';
 // import { PrismaService } from '@/prisma/prisma.service';
 // import { userSeed } from '@/data/userSeed';
 
@@ -55,7 +55,28 @@ describe('UserController', () => {
       expect(userController.findAll()).rejects.toThrowError();
     });
   });
+  describe('create', () => {
+    it('Should create user successfully', async () => {
+      const newUser = {
+        id: 12,
+        email: 'newuser@email.com',
+        name: 'New User',
+        password: undefined,
+        role: 'user',
+        createdAt: '2023-07-18T01:54:18.864Z',
+        updatedAt: '2023-07-18T01:54:18.864Z',
+      };
+      const result = await userController.create(createNewUser);
 
+      expect(result).toEqual(newUser);
+    });
+
+    it('should throw an exception', async () => {
+      jest.spyOn(userService, 'create').mockRejectedValueOnce(new Error());
+
+      expect(userController.create(errorCreateNewUser)).rejects.toThrowError();
+    });
+  });
   describe('findOne', () => {
     it('Should return user by id successfully', async () => {
       const result = await userController.findOne(MockUser[1].id);
@@ -115,7 +136,7 @@ describe('UserController', () => {
       ).rejects.toThrowError();
     });
   });
-  describe('updateUSer', () => {
+  describe('updateUser', () => {
     const updateUserDto: UpdateUserDto = {
       email: 'test@email.com',
       role: UserType.User,
