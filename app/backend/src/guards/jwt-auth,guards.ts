@@ -20,11 +20,15 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       context.getClass(),
     ]);
 
-    if (isPublic) return true;
+    if (isPublic) {
+      return true;
+    }
 
     const canActivate = super.canActivate(context);
 
-    if (typeof canActivate === 'boolean') return canActivate;
+    if (typeof canActivate === 'boolean') {
+      return canActivate;
+    }
 
     const canActivatePromise = canActivate as Promise<boolean>;
     return canActivatePromise.catch((error) => {
