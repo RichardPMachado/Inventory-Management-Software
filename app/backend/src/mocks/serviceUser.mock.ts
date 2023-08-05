@@ -12,6 +12,14 @@ export const createMockUserController: CreateUserDto = {
   role: UserType.Root,
 };
 
+export const MockAuthRequest = {
+  id: 1,
+  email: 'test@email.com',
+  name: 'test',
+  password: '$2b$10$ZnCM4YaUnAE.rNDwftvWre5vocsb8yW/.qr4hc/11RywG89ndByTu',
+  role: UserType.User,
+};
+
 export const MockUser = [
   {
     id: '1',
